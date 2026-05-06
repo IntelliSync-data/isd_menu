@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Override favicon and add PWA icons -->
+        <template id="isd_custom_favicon" inherit_id="web.layout" name="Custom Favicon and PWA Icons">
+            <xpath expr="//link[@rel='shortcut icon']" position="replace">
+                <link rel="shortcut icon" href="/isd_menu/static/img/icon.png" type="image/png"/>
+            </xpath>
+
+            <xpath expr="//head" position="inside">
+                <!-- Favicon -->
+                <link rel="icon" type="image/png" href="/isd_menu/static/img/icon.png"/>
+
+                <!-- iOS PWA Icons -->
+                <link rel="apple-touch-icon" href="/isd_menu/static/img/icon.png"/>
+                <link rel="apple-touch-icon" sizes="180x180" href="/isd_menu/static/img/icon.png"/>
+                <link rel="apple-touch-icon" sizes="152x152" href="/isd_menu/static/img/icon.png"/>
+                <link rel="apple-touch-icon" sizes="167x167" href="/isd_menu/static/img/icon.png"/>
+
+                <!-- PWA Manifest (override default) -->
+                <link rel="manifest" href="/isd_menu/static/manifest.json" crossorigin="use-credentials"/>
+
+                <!-- iOS Web App Meta Tags -->
+                <meta name="apple-mobile-web-app-capable" content="yes"/>
+                <meta name="apple-mobile-web-app-status-bar-style" content="default"/>
+                <meta name="apple-mobile-web-app-title" content="IntelliSync"/>
+
+                <!-- Theme color -->
+                <meta name="theme-color" content="#ffffff"/>
+            </xpath>
+        </template>
+    </data>
+</odoo>

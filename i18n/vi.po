@@ -1,0 +1,88 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* isd_menu
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 18.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-10-30 12:00:00\n"
+"PO-Revision-Date: 2025-10-30 12:00:00\n"
+"Last-Translator: \n"
+"Language-Team: Vietnamese\n"
+"Language: vi\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#. module: isd_menu
+#: model:ir.model,name:isd_menu.model_user_menu_config
+msgid "User Menu Configuration"
+msgstr "Cấu Hình Menu Người Dùng"
+
+#. module: isd_menu
+#: model:ir.model.fields,field_description:isd_menu.field_user_menu_config__user_id
+msgid "User"
+msgstr "Người Dùng"
+
+#. module: isd_menu
+#: model:ir.model.fields,field_description:isd_menu.field_user_menu_config__menu_id
+msgid "Menu"
+msgstr "Menu"
+
+#. module: isd_menu
+#: model:ir.model.fields,field_description:isd_menu.field_user_menu_config__show_menu
+msgid "Show Menu"
+msgstr "Hiển Thị Menu"
+
+#. module: isd_menu
+#: model:ir.model.fields,field_description:isd_menu.field_res_users__menu_config_ids
+msgid "Menu Configuration"
+msgstr "Cấu Hình Menu"
+
+#. module: isd_menu
+#: model_terms:ir.ui.view,arch_db:isd_menu.view_users_form_inherit_menu_config
+msgid "Menu Config"
+msgstr "Cấu Hình Menu"
+
+#. module: isd_menu
+#: model_terms:ir.ui.view,arch_db:isd_menu.view_users_form_inherit_menu_config
+msgid "Initialize Menu Config"
+msgstr "Khởi Tạo Cấu Hình Menu"
+
+#. module: isd_menu
+#: model_terms:ir.ui.view,arch_db:isd_menu.view_users_form_inherit_menu_config
+msgid "Load all root menus into configuration"
+msgstr "Tải tất cả menu gốc vào cấu hình"
+
+#. module: isd_menu
+#: model_terms:ir.ui.view,arch_db:isd_menu.view_users_form_inherit_menu_config
+msgid "Apply Menu Settings"
+msgstr "Áp Dụng Cài Đặt Menu"
+
+#. module: isd_menu
+#: model_terms:ir.ui.view,arch_db:isd_menu.view_users_form_inherit_menu_config
+msgid "Apply and reload menu configuration"
+msgstr "Áp dụng và tải lại cấu hình menu"
+
+#. module: isd_menu
+#: model:ir.model.constraint,message:isd_menu.constraint_user_menu_config_user_menu_unique
+msgid "Menu configuration must be unique per user!"
+msgstr "Cấu hình menu phải là duy nhất cho mỗi người dùng!"
+
+#. module: isd_menu
+#: code:addons/isd_menu/models/res_users.py:0
+#, python-format
+msgid "Menu configuration initialized successfully!"
+msgstr "Khởi tạo cấu hình menu thành công!"
+
+#. module: isd_menu
+#: model:ir.model,name:isd_menu.model_res_users
+msgid "User"
+msgstr "Người Dùng"
+
+#. module: isd_menu
+#: model:ir.model,name:isd_menu.model_ir_ui_menu
+msgid "Menu"
+msgstr "Menu"

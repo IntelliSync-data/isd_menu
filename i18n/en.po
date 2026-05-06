@@ -1,0 +1,88 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* isd_menu
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 18.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-10-30 12:00:00\n"
+"PO-Revision-Date: 2025-10-30 12:00:00\n"
+"Last-Translator: \n"
+"Language-Team: English\n"
+"Language: en\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#. module: isd_menu
+#: model:ir.model,name:isd_menu.model_user_menu_config
+msgid "User Menu Configuration"
+msgstr "User Menu Configuration"
+
+#. module: isd_menu
+#: model:ir.model.fields,field_description:isd_menu.field_user_menu_config__user_id
+msgid "User"
+msgstr "User"
+
+#. module: isd_menu
+#: model:ir.model.fields,field_description:isd_menu.field_user_menu_config__menu_id
+msgid "Menu"
+msgstr "Menu"
+
+#. module: isd_menu
+#: model:ir.model.fields,field_description:isd_menu.field_user_menu_config__show_menu
+msgid "Show Menu"
+msgstr "Show Menu"
+
+#. module: isd_menu
+#: model:ir.model.fields,field_description:isd_menu.field_res_users__menu_config_ids
+msgid "Menu Configuration"
+msgstr "Menu Configuration"
+
+#. module: isd_menu
+#: model_terms:ir.ui.view,arch_db:isd_menu.view_users_form_inherit_menu_config
+msgid "Menu Config"
+msgstr "Menu Config"
+
+#. module: isd_menu
+#: model_terms:ir.ui.view,arch_db:isd_menu.view_users_form_inherit_menu_config
+msgid "Initialize Menu Config"
+msgstr "Initialize Menu Config"
+
+#. module: isd_menu
+#: model_terms:ir.ui.view,arch_db:isd_menu.view_users_form_inherit_menu_config
+msgid "Load all root menus into configuration"
+msgstr "Load all root menus into configuration"
+
+#. module: isd_menu
+#: model_terms:ir.ui.view,arch_db:isd_menu.view_users_form_inherit_menu_config
+msgid "Apply Menu Settings"
+msgstr "Apply Menu Settings"
+
+#. module: isd_menu
+#: model_terms:ir.ui.view,arch_db:isd_menu.view_users_form_inherit_menu_config
+msgid "Apply and reload menu configuration"
+msgstr "Apply and reload menu configuration"
+
+#. module: isd_menu
+#: model:ir.model.constraint,message:isd_menu.constraint_user_menu_config_user_menu_unique
+msgid "Menu configuration must be unique per user!"
+msgstr "Menu configuration must be unique per user!"
+
+#. module: isd_menu
+#: code:addons/isd_menu/models/res_users.py:0
+#, python-format
+msgid "Menu configuration initialized successfully!"
+msgstr "Menu configuration initialized successfully!"
+
+#. module: isd_menu
+#: model:ir.model,name:isd_menu.model_res_users
+msgid "User"
+msgstr "User"
+
+#. module: isd_menu
+#: model:ir.model,name:isd_menu.model_ir_ui_menu
+msgid "Menu"
+msgstr "Menu"

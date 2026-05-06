@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- User Menu Config List View -->
+        <record id="user_menu_config_view_list" model="ir.ui.view">
+            <field name="name">user.menu.config.view.list</field>
+            <field name="model">user.menu.config</field>
+            <field name="arch" type="xml">
+                <list string="Menu Configuration" editable="bottom" create="0" delete="0">
+                    <field name="menu_id" readonly="1"/>
+                    <field name="show_menu" widget="boolean_toggle"/>
+                </list>
+            </field>
+        </record>
+
+        <!-- Inherit res.users form view to add Menu Config tab -->
+        <record id="view_users_form_inherit_menu_config" model="ir.ui.view">
+            <field name="name">res.users.form.inherit.menu.config</field>
+            <field name="model">res.users</field>
+            <field name="inherit_id" ref="base.view_users_form"/>
+            <field name="arch" type="xml">
+                <!-- Add Menu Config tab after Access Rights -->
+                <xpath expr="//page[@name='access_rights']" position="after">
+                    <page name="menu_config" string="Menu Config">
+                        <group>
+                            <group>
+                                <button name="action_initialize_menu_config"
+                                        string="Initialize Menu"
+                                        type="object"
+                                        class="btn-primary"
+                                        help="Load all root menus into configuration"/>
+                                <button name="action_apply_menu_settings"
+                                        string="Apply Menu Settings"
+                                        type="object"
+                                        class="btn-success"
+                                        help="Apply and reload menu configuration"/>
+                            </group>
+                        </group>
+                        <field name="menu_config_ids"
+                               widget="one2many"
+                               context="{'default_user_id': id}">
+                            <list editable="bottom" create="1" delete="1">
+                                <field name="menu_id"
+                                       domain="[('parent_id', '=', False)]"
+                                       options="{'no_create': True, 'no_open': True}"/>
+                                <field name="show_menu" widget="boolean_toggle"/>
+                            </list>
+                        </field>
+                    </page>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>
