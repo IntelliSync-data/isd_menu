@@ -41,6 +41,7 @@ jobs:
         username: ${{ secrets.VFO_USERNAME }}
         key: ${{ secrets.VFO_SSH_KEY }}
         script: |
+          source /opt/odoo-venv/bin/activate
           echo "Updating apps list..."
           sudo -u odoo /opt/odoo18/odoo-bin -c /etc/odoo/odoo.conf -d ${{ secrets.VFO_DB_NAME }} -u base --stop-after-init
           echo "Updating isd_menu module..."
