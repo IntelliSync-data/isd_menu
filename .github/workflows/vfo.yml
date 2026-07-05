@@ -41,11 +41,10 @@ jobs:
         username: ${{ secrets.VFO_USERNAME }}
         key: ${{ secrets.VFO_SSH_KEY }}
         script: |
-          source /opt/odoo-venv/bin/activate
           echo "Updating apps list..."
-          echo "env['ir.module.module'].update_list(); env.cr.commit()" | sudo -u odoo /opt/odoo18/odoo-bin shell -c /etc/odoo/odoo.conf -d ${{ secrets.VFO_DB_NAME }}
+          sudo -u odoo /opt/odoo-venv/bin/python /opt/odoo18/odoo-bin -c /etc/odoo/odoo.conf -d ${{ secrets.VFO_DB_NAME }} -u base --stop-after-init
           echo "Updating isd_menu module..."
-          sudo -u odoo /opt/odoo18/odoo-bin -c /etc/odoo/odoo.conf -d ${{ secrets.VFO_DB_NAME }} -u isd_menu --stop-after-init || \
+          sudo -u odoo /opt/odoo-venv/bin/python /opt/odoo18/odoo-bin -c /etc/odoo/odoo.conf -d ${{ secrets.VFO_DB_NAME }} -u isd_menu --stop-after-init || \
             echo "Module not installed yet (now visible in Apps list), continuing..."
 
     - name: Restart Odoo Service
