@@ -43,7 +43,7 @@ jobs:
         script: |
           source /opt/odoo-venv/bin/activate
           echo "Updating apps list..."
-          sudo -u odoo /opt/odoo18/odoo-bin -c /etc/odoo/odoo.conf -d ${{ secrets.VFO_DB_NAME }} -u base --stop-after-init
+          echo "env['ir.module.module'].update_list(); env.cr.commit()" | sudo -u odoo /opt/odoo18/odoo-bin shell -c /etc/odoo/odoo.conf -d ${{ secrets.VFO_DB_NAME }}
           echo "Updating isd_menu module..."
           sudo -u odoo /opt/odoo18/odoo-bin -c /etc/odoo/odoo.conf -d ${{ secrets.VFO_DB_NAME }} -u isd_menu --stop-after-init || \
             echo "Module not installed yet (now visible in Apps list), continuing..."
