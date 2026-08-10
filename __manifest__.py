@@ -23,6 +23,7 @@ Features:
     'data': [
         'security/ir.model.access.csv',
         'views/res_users_views.xml',
+        'views/menu_setting_views.xml',
         'views/webclient_templates.xml',
     ],
     'installable': True,
