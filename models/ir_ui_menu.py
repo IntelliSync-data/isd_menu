@@ -9,6 +9,21 @@ _logger = logging.getLogger(__name__)
 class IrUiMenu(models.Model):
     _inherit = 'ir.ui.menu'
 
+    def write(self, vals):
+        res = super().write(vals)
+        # Auto-save custom sequence when admin changes root menu order
+        if 'sequence' in vals and not self.env.context.get('isd_menu_applying'):
+            root_menus = self.filtered(lambda m: not m.parent_id)
+            if root_menus:
+                SeqModel = self.env['isd.menu.sequence'].sudo()
+                for menu in root_menus:
+                    existing = SeqModel.search([('menu_id', '=', menu.id)], limit=1)
+                    if existing:
+                        existing.write({'sequence': menu.sequence})
+                    else:
+                        SeqModel.create({'menu_id': menu.id, 'sequence': menu.sequence})
+        return res
+
     @api.model
     def load_menus(self, debug=False):
         """Override to apply custom menu filtering

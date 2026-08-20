@@ -26,6 +26,7 @@ Features:
         'views/menu_setting_views.xml',
         'views/webclient_templates.xml',
     ],
+    'post_init_hook': 'post_init_hook',
     'installable': True,
     'application': True,
     'auto_install': False,
