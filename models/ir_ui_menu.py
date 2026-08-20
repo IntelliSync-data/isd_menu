@@ -26,15 +26,19 @@ class IrUiMenu(models.Model):
 
     @api.model
     def load_menus(self, debug=False):
-        """Override to apply custom menu filtering
+        """Override to apply custom menu filtering and custom ordering.
 
         Logic:
         - Menus NOT in config: show based on access rights (default behavior)
         - Menus IN config with show_menu=True: show them + all children
         - Menus IN config with show_menu=False: hide them + all children
+        - Root menu children are re-sorted by isd.menu.sequence if available
         """
         # Get default menus (flat dictionary based on access rights)
         menus = super().load_menus(debug=debug)
+
+        # Re-sort root children by custom sequence
+        menus = self._apply_custom_menu_order(menus)
 
         # Check if current user has custom menu configuration
         user_id = self.env.user.id
@@ -96,3 +100,30 @@ class IrUiMenu(models.Model):
         _logger.info(f'User {user_id} filtered menus: {len(filtered_menus) - 1} total (excluding root)')
 
         return filtered_menus
+
+    @api.model
+    def _apply_custom_menu_order(self, menus):
+        """Re-sort root menu children based on saved custom sequence."""
+        try:
+            self.env.cr.execute("SELECT menu_id, sequence FROM isd_menu_sequence")
+            saved = dict(self.env.cr.fetchall())
+        except Exception:
+            return menus
+
+        if not saved or 'root' not in menus:
+            return menus
+
+        root = menus['root']
+        children = root.get('children', [])
+        if not children:
+            return menus
+
+        # Sort children by custom sequence (fall back to menu data sequence)
+        def sort_key(menu_id):
+            if menu_id in saved:
+                return saved[menu_id]
+            menu_data = menus.get(menu_id, {})
+            return menu_data.get('sequence', 999)
+
+        root['children'] = sorted(children, key=sort_key)
+        return menus

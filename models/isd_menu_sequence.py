@@ -10,33 +10,6 @@ class IsdMenuSequence(models.Model):
     _name = 'isd.menu.sequence'
     _description = 'Custom Menu Sequence'
 
-    def _register_hook(self):
-        """Re-apply saved menu order after registry rebuild (runs after all data files loaded)."""
-        super()._register_hook()
-        try:
-            cr = self.env.cr
-            cr.execute("SELECT COUNT(*) FROM isd_menu_sequence")
-            count = cr.fetchone()[0]
-            if count == 0:
-                # First time or empty — snapshot current order
-                cr.execute("""
-                    INSERT INTO isd_menu_sequence (menu_id, sequence, create_uid, write_uid, create_date, write_date)
-                    SELECT id, sequence, 1, 1, NOW(), NOW()
-                    FROM ir_ui_menu WHERE parent_id IS NULL
-                """)
-                _logger.info("Saved initial menu order snapshot")
-            else:
-                # Re-apply saved order
-                cr.execute("SELECT menu_id, sequence FROM isd_menu_sequence")
-                for menu_id, seq in cr.fetchall():
-                    cr.execute(
-                        "UPDATE ir_ui_menu SET sequence = %s WHERE id = %s AND sequence != %s",
-                        (seq, menu_id, seq),
-                    )
-                _logger.info(f"Re-applied custom menu order ({count} entries checked)")
-        except Exception:
-            _logger.warning("Could not re-apply custom menu order", exc_info=True)
-
     menu_id = fields.Many2one(
         'ir.ui.menu', string='Menu',
         required=True, ondelete='cascade', index=True,
