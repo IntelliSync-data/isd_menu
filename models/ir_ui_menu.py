@@ -12,11 +12,9 @@ class IrUiMenu(models.Model):
     def write(self, vals):
         res = super().write(vals)
         # Only save custom sequence when changed via UI (not during module upgrade)
-        # Module upgrades use install_mode or xml loading context
         if (
             'sequence' in vals
             and not self.env.context.get('isd_menu_applying')
-            and not self.env.context.get('install_mode')
             and not self.pool._init
         ):
             root_menus = self.filtered(lambda m: not m.parent_id)
@@ -32,7 +30,11 @@ class IrUiMenu(models.Model):
 
     @api.model
     def load_menus(self, debug=False):
-        """Override to apply custom menu filtering and custom ordering."""
+        """Override to apply custom menu filtering, ordering, and sync DB sequence."""
+        # Sync DB sequence from isd_menu_sequence before loading
+        # This ensures Menu Setting list view shows correct order
+        self._sync_custom_sequence_to_db()
+
         menus = super().load_menus(debug=debug)
 
         # Re-sort root children by custom sequence
@@ -45,16 +47,12 @@ class IrUiMenu(models.Model):
         if not config_model.has_custom_config(user_id):
             return menus
 
-        # Get all menu configs for this user (both show_menu=True and False)
         all_configs = config_model.search([('user_id', '=', user_id)])
-
-        # Build sets of menu IDs to hide (show_menu=False)
         hidden_root_ids = set(all_configs.filtered(lambda c: not c.show_menu).mapped('menu_id.id'))
 
         if not hidden_root_ids:
             return menus
 
-        # Build set of all menu IDs to hide (roots + all descendants)
         def get_descendants_from_dict(menu_id, menus_dict):
             descendants = {menu_id}
             if menu_id in menus_dict:
@@ -66,7 +64,6 @@ class IrUiMenu(models.Model):
         for hidden_root_id in hidden_root_ids:
             hidden_ids.update(get_descendants_from_dict(hidden_root_id, menus))
 
-        # Filter menus dictionary - remove hidden menus
         filtered_menus = {}
         for menu_id, menu_data in menus.items():
             if menu_id == 'root':
@@ -85,6 +82,21 @@ class IrUiMenu(models.Model):
                 filtered_menus[menu_id] = menu_copy
 
         return filtered_menus
+
+    @api.model
+    def _sync_custom_sequence_to_db(self):
+        """Sync saved custom sequences back to ir_ui_menu.sequence via SQL."""
+        try:
+            self.env.cr.execute("""
+                UPDATE ir_ui_menu m
+                SET sequence = s.sequence
+                FROM isd_menu_sequence s
+                WHERE m.id = s.menu_id AND m.sequence != s.sequence
+            """)
+            if self.env.cr.rowcount:
+                _logger.info(f"Synced {self.env.cr.rowcount} menu sequences from custom order")
+        except Exception:
+            pass
 
     @api.model
     def _apply_custom_menu_order(self, menus):
