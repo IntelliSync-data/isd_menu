@@ -33,7 +33,7 @@
 
     <!-- Menu Item (manager only) -->
     <menuitem id="menu_isd_menu_root"
-              name="ISD Menu"
+              name="Menu Manager (by ISD)"
               web_icon="isd_menu,static/description/icon.png"
               sequence="999"/>
 

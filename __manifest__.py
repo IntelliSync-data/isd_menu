@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 {
-    'name': 'ISD Menu Manager',
+    'name': 'Menu Manager (by ISD)',
     'version': '18.0.1.0.0',
     'category': 'ISD Modules',
     'summary': 'Custom menu visibility management per user',

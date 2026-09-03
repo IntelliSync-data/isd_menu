@@ -86,3 +86,8 @@ msgstr "Người Dùng"
 #: model:ir.model,name:isd_menu.model_ir_ui_menu
 msgid "Menu"
 msgstr "Menu"
+
+#. module: isd_menu
+#: model:ir.model,name:isd_menu.model_ir_ui_menu
+msgid "Menu Manager (by ISD)"
+msgstr "QL Menu (bởi ISD)"
