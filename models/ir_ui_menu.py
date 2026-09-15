@@ -40,48 +40,50 @@ class IrUiMenu(models.Model):
         # Re-sort root children by custom sequence
         menus = self._apply_custom_menu_order(menus)
 
-        # Check if current user has custom menu configuration
-        user_id = self.env.user.id
-        config_model = self.env['user.menu.config']
-
-        if not config_model.has_custom_config(user_id):
+        hidden_root_ids = self._get_isd_hidden_root_ids()
+        if not hidden_root_ids or 'root' not in menus:
             return menus
 
-        all_configs = config_model.search([('user_id', '=', user_id)])
-        hidden_root_ids = set(all_configs.filtered(lambda c: not c.show_menu).mapped('menu_id.id'))
-
-        if not hidden_root_ids:
-            return menus
-
-        def get_descendants_from_dict(menu_id, menus_dict):
-            descendants = {menu_id}
-            if menu_id in menus_dict:
-                for child_id in menus_dict[menu_id].get('children', []):
-                    descendants.update(get_descendants_from_dict(child_id, menus_dict))
-            return descendants
-
-        hidden_ids = set()
-        for hidden_root_id in hidden_root_ids:
-            hidden_ids.update(get_descendants_from_dict(hidden_root_id, menus))
-
-        filtered_menus = {}
-        for menu_id, menu_data in menus.items():
-            if menu_id == 'root':
-                root_copy = menu_data.copy()
-                root_copy['children'] = [
-                    child_id for child_id in menu_data.get('children', [])
-                    if child_id not in hidden_ids
-                ]
-                filtered_menus['root'] = root_copy
-            elif menu_id not in hidden_ids:
-                menu_copy = menu_data.copy()
-                menu_copy['children'] = [
-                    child_id for child_id in menu_data.get('children', [])
-                    if child_id not in hidden_ids
-                ]
-                filtered_menus[menu_id] = menu_copy
-
+        # Only detach hidden apps from the root. Their entries must stay in the dict:
+        # other modules index it by menu id (e.g. website.load_menus_root looks up
+        # every root menu) and would raise KeyError -> HTTP 500 on the frontend.
+        filtered_menus = dict(menus)
+        root_copy = dict(menus['root'])
+        root_copy['children'] = [
+            child_id for child_id in root_copy.get('children', [])
+            if child_id not in hidden_root_ids
+        ]
+        filtered_menus['root'] = root_copy
         return filtered_menus
+
+    @api.model
+    def load_menus_root(self):
+        """Hide the user's disabled apps from the root menu list (used by the website frontend)."""
+        root = super().load_menus_root()
+        hidden_root_ids = self._get_isd_hidden_root_ids()
+        if not hidden_root_ids:
+            return root
+
+        root_copy = dict(root)
+        root_copy['children'] = [
+            menu for menu in root.get('children', [])
+            if menu.get('id') not in hidden_root_ids
+        ]
+        if 'all_menu_ids' in root:
+            root_copy['all_menu_ids'] = [
+                menu_id for menu_id in root['all_menu_ids']
+                if menu_id not in hidden_root_ids
+            ]
+        return root_copy
+
+    @api.model
+    def _get_isd_hidden_root_ids(self):
+        user_id = self.env.user.id
+        config_model = self.env['user.menu.config'].sudo()
+        if not config_model.has_custom_config(user_id):
+            return set()
+        configs = config_model.search([('user_id', '=', user_id), ('show_menu', '=', False)])
+        return set(configs.mapped('menu_id').ids)
 
     @api.model
     def _sync_custom_sequence_to_db(self):
