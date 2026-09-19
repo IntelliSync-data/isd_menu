@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <data>
+        <!-- Hide the "Powered by Odoo" block. The node is kept because website and
+             website_sale inherit this template and target its content -->
+        <template id="isd_hide_brand_promotion" inherit_id="web.brand_promotion" name="Hide Brand Promotion">
+            <xpath expr="//div[hasclass('o_brand_promotion')]" position="attributes">
+                <attribute name="class" add="d-none" separator=" "/>
+            </xpath>
+        </template>
+
         <!-- Override favicon and add PWA icons -->
         <template id="isd_custom_favicon" inherit_id="web.layout" name="Custom Favicon and PWA Icons">
             <xpath expr="//link[@rel='shortcut icon']" position="replace">
