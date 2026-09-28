@@ -86,6 +86,31 @@ class IrUiMenu(models.Model):
         return set(configs.mapped('menu_id').ids)
 
     @api.model
+    def _get_isd_blocked_action_ids(self):
+        """Actions the current user must not open, even with a direct link.
+
+        Hiding a menu only removes the button, so the action behind it stays
+        reachable by URL. A hidden parent takes its whole subtree with it.
+        """
+        hidden_ids = self._get_isd_hidden_root_ids()
+        if not hidden_ids:
+            return set()
+
+        Menu = self.sudo()
+        hidden_menus = Menu.search([('id', 'child_of', list(hidden_ids))])
+
+        def action_ids(menus):
+            return {menu.action.id for menu in menus if menu.action}
+
+        # The same action can sit under two menus, so keep the ones the user can
+        # still reach through a menu that was left visible
+        still_reachable = Menu.search([
+            ('id', 'not in', hidden_menus.ids),
+            ('action', '!=', False),
+        ])
+        return action_ids(hidden_menus) - action_ids(still_reachable)
+
+    @api.model
     def _sync_custom_sequence_to_db(self):
         """Sync saved custom sequences back to ir_ui_menu.sequence via SQL."""
         try:

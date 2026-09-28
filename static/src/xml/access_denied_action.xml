@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <t t-name="isd_menu.AccessDenied">
+        <div class="o_action_manager d-flex flex-column align-items-center justify-content-center text-center p-5">
+            <i class="fa fa-lock fa-4x text-muted mb-4"/>
+            <h4 t-esc="message"/>
+            <p class="text-muted">
+                Ask an administrator if you should be able to open it.
+            </p>
+            <button class="btn btn-primary mt-3" t-on-click="goHome">
+                Continue
+            </button>
+        </div>
+    </t>
+
+</templates>

@@ -26,6 +26,13 @@ Features:
         'views/menu_setting_views.xml',
         'views/webclient_templates.xml',
     ],
+    'assets': {
+        'web.assets_backend': [
+            'isd_menu/static/src/js/export_all_dialog.js',
+            'isd_menu/static/src/js/access_denied_action.js',
+            'isd_menu/static/src/xml/access_denied_action.xml',
+        ],
+    },
     'post_init_hook': 'post_init_hook',
     'installable': True,
     'application': True,
